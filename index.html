@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MY-PR</title>
+    <style>
+      body {
+        background-color: #333;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 4px solid #ccc;
+        border-radius: 30px;
+        max-width: 600px;
+        margin: 10px auto;
+        background: linear-gradient(
+          135deg,
+          hsl(0, 93%, 35%),
+          #ff4800,
+          #ffaa00,
+          #f73504
+        );
+        box-shadow: 0 4px 8px rgba(231, 148, 148, 0.5);
+      }
+      .inputArea {
+        display: flex;
+        align-items: center; /* vertically align inputs and button */
+        justify-content: center;
+        flex-wrap: wrap; /* wrap on small screens */
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        text-decoration: underline;
+        font-family: cursive;
+      }
+      input {
+        width: 120px;
+        margin: 10px 3px;
+        border-radius: 10px;
+        padding: 6px 6px;
+        border: 1px solid #131212;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin: 10px auto;
+      }
+
+      tr,
+      td,
+      th {
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        border: 2px solid #131212;
+        width: 100px;
+        font-size: large;
+        padding: 8px 8px;
+      }
+
+      button {
+        background-color: #1f1f1f; /* dark gray/black button */
+        color: #fff;
+        border: none;
+        padding: 8px 10px;
+        margin: 2px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 26px;
+        padding: 0 12px;
+      }
+
+      button:hover {
+        background-color: #333;
+        transform: scale(1.05);
+      }
+
+      /* Make the table container scrollable */
+      .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 200px;
+      }
+      @media (max-width: 500px) {
+        tr,
+        td,
+        th {
+          font-size: 0.9rem;
+          padding: 4px;
+        }
+
+        th {
+          font-weight: bold;
+        }
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .inputArea input {
+          width: 100%;
+          margin: 5px auto;
+        }
+
+        table {
+          font-size: 0.9rem;
+        }
+
+        .container {
+          padding: 10px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        table {
+          display: block;
+          overflow-x: auto;
+          width: 100%;
+        }
+
+        tr,
+        td,
+        th {
+          white-space: nowrap;
+        }
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>My-Prs <i class="fa-solid fa-dumbbell"></i></h1>
+      <div class="inputArea">
+        <form id="myForm">
+          <input type="text" id="nameBox" placeholder="Enter a Exercise" />
+          <input type="number" id="prBox" placeholder="Enter your Pr 🏋️" />
+          <input type="number" id="repBox" placeholder="Max Reps 💪" />
+          <button onclick="addData()" type="submit">Add 📝</button>
+          <button onclick="clearAll()">
+            <i class="fa-solid fa-eraser"></i>
+          </button>
+        </form>
+        <p id="error" style="color: black"></p>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Pr</th>
+              <th>Reps</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table"></tbody>
+        </table>
+      </div>
+      <p>&copy;Joel "You’ve come far — don’t stop now!"</p>
+    </div>
+  </body>
+  <script>
+    let datas = [];
+    //for error
+    const form = document.getElementById("myForm");
+    const error = document.getElementById("error");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("nameBox").value.trim();
+      const pr = document.getElementById("prBox").value.trim();
+      const reps = document.getElementById("repBox").value.trim();
+
+      if (name === "") {
+        error.textContent = "Exersice can't be empty";
+        return;
+      }
+      if (pr === "") {
+        error.textContent = "Please enter Your Pr weight";
+        return;
+      }
+
+      if (reps === "") {
+        error.textContent = "Please enter your Reps.";
+        return;
+      }
+
+      error.textContent = "";
+    });
+    function saveTo() {
+      localStorage.setItem("myDatas", JSON.stringify(datas));
+    }
+
+    function loadFromLocalStorage() {
+      const loadData = localStorage.getItem("myDatas");
+      if (loadData) {
+        datas = JSON.parse(loadData);
+      }
+    }
+    function displayData() {
+      const table = document.getElementById("table");
+      table.innerHTML = "";
+      if (datas.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+  <td colspan="4" style="text-align:center; color:red;">Enter Your Progress.</td>
+  `;
+        table.appendChild(tr);
+        return;
+      }
+      datas.forEach((data) => {
+        const tr = document.createElement("tr");
+
+        if (data.editData) {
+          tr.innerHTML = `
+  <td>${data.name}</td>
+  <td><input value="${data.pr}" id="pr-${data.id}"/></td>
+  <td><input value="${data.reps}" id="reps-${data.id}"/></td>
+  <td>
+    <button onclick="deleteRow(${data.id})"><i class="fa-solid fa-trash"></i></button>
+    <button onclick="updateRow(${data.id})"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+ 
+    </td>
+`;
+        } else {
+          tr.innerHTML = `
+    <th>${data.name}</th>
+    <th>${data.pr} Kgs</th>
+    <th>${data.reps} reps</th>
+  <td><button onclick="deleteRow(${data.id})"><i class="fa-solid fa-trash"></i></button>
+    <button onclick="editRow(${data.id})"><i class="fa-solid fa-pen-to-square"></i></button></td>
+    `;
+        }
+        table.appendChild(tr);
+      });
+    }
+
+    function addData() {
+      const name = document.getElementById("nameBox");
+      const pr = document.getElementById("prBox");
+      const reps = document.getElementById("repBox");
+      if (!name.value || !pr.value || !reps.value) {
+        alert("Please enter something");
+        return;
+      } else {
+        const data = {
+          id: Date.now(),
+          editData: false,
+          name: name.value,
+          pr: pr.value,
+          reps: reps.value,
+        };
+        datas = [data, ...datas];
+        name.value = "";
+        pr.value = "";
+        reps.value = "";
+      }
+      saveTo();
+      displayData();
+    }
+
+    function deleteRow(dataId) {
+      datas = datas.filter((data) => {
+        return data.id !== dataId;
+      });
+      saveTo();
+      displayData();
+    }
+
+    function editRow(dataId) {
+      datas = datas.map((data) => {
+        if (data.id === dataId) {
+          return {
+            ...data,
+            editData: true,
+          };
+        } else {
+          return {
+            ...data,
+            editData: false,
+          };
+        }
+      });
+      displayData();
+    }
+
+    function updateRow(dataId) {
+      const inputPr = document.getElementById(`pr-${dataId}`);
+      const inputReps = document.getElementById(`reps-${dataId}`);
+
+      datas = datas.map((data) => {
+        if (data.id === dataId) {
+          return {
+            ...data,
+            pr: inputPr.value,
+            reps: inputReps.value,
+            editData: false,
+          };
+        } else {
+          return data;
+        }
+      });
+      saveTo();
+      displayData();
+    }
+
+    function clearAll() {
+      datas = [];
+      localStorage.clear();
+      displayData();
+      saveTo();
+    }
+    loadFromLocalStorage();
+    displayData();
+  </script>
+</html>
