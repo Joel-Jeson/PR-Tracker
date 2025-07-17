@@ -1,0 +1,131 @@
+ body {
+        background-color: #333;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 4px solid #ccc;
+        border-radius: 30px;
+        max-width: 600px;
+        margin: 10px auto;
+        background: linear-gradient(
+          135deg,
+          hsl(0, 93%, 35%),
+          #ff4800,
+          #ffaa00,
+          #f73504
+        );
+        box-shadow: 0 4px 8px rgba(231, 148, 148, 0.5);
+      }
+      .inputArea {
+        display: flex;
+        align-items: center; /* vertically align inputs and button */
+        justify-content: center;
+        flex-wrap: wrap; /* wrap on small screens */
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        text-decoration: underline;
+        font-family: cursive;
+      }
+      input {
+        width: 120px;
+        margin: 10px 3px;
+        border-radius: 10px;
+        padding: 6px 6px;
+        border: 1px solid #131212;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin: 10px auto;
+      }
+
+      tr,
+      td,
+      th {
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        border: 2px solid #131212;
+        width: 100px;
+        font-size: large;
+        padding: 8px 8px;
+      }
+
+      button {
+        background-color: #1f1f1f; /* dark gray/black button */
+        color: #fff;
+        border: none;
+        padding: 8px 10px;
+        margin: 2px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 26px;
+        padding: 0 12px;
+      }
+
+      button:hover {
+        background-color: #333;
+        transform: scale(1.05);
+      }
+
+      /* Make the table container scrollable */
+      .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 200px;
+      }
+      @media (max-width: 500px) {
+        tr,
+        td,
+        th {
+          font-size: 0.9rem;
+          padding: 4px;
+        }
+
+        th {
+          font-weight: bold;
+        }
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .inputArea input {
+          width: 100%;
+          margin: 5px auto;
+        }
+
+        table {
+          font-size: 0.9rem;
+        }
+
+        .container {
+          padding: 10px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        table {
+          display: block;
+          overflow-x: auto;
+          width: 100%;
+        }
+
+        tr,
+        td,
+        th {
+          white-space: nowrap;
+        }
+      }
